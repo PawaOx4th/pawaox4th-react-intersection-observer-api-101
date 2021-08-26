@@ -1,7 +1,7 @@
 import React, { useEffect, useState, ReactElement, useRef } from 'react';
 import logo from './logo.svg';
 import loading from './assets/Ellipsis-1s-200px.svg';
-import './App.css';
+
 import { getSomething, IPost, postsResponse } from './api';
 
 // const LoadingComponent = () => {
@@ -46,10 +46,12 @@ function App() {
   const [element, setElement] = useState<HTMLDivElement | null>();
 
   return (
-    <div className="App bg-gray-800 min-h-screen">
-      <button onClick={(e) => handleLoad(11, 20)}>😎</button>
+    <div className="App bg-gray-800 min-h-screen w-full text-center">
+      <button onClick={(e) => handleLoad(11, 20)} className="mt-12 text-3xl">
+        😎
+      </button>
       <div className="mx-auto my-0 w-8/12 pt-12 pb-14 text-neon-eucalyptus">
-        <div>
+        <div className="">
           {posts &&
             posts.map((item, index) => {
               return (
@@ -63,10 +65,9 @@ function App() {
                 </div>
               );
             })}
-          <div ref={setElement}>
-            <LoadingComponent />
-          </div>
-          {/* <p ref={setElement}>Loaging</p> */}
+        </div>
+        <div>
+          <strong className="text-red-500 mt-12">NO Loading...</strong>
         </div>
       </div>
     </div>
