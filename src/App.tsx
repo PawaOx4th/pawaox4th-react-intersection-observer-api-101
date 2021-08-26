@@ -1,4 +1,10 @@
-import React, { useEffect, useState, ReactElement, useRef } from 'react';
+import React, {
+  useEffect,
+  useState,
+  ReactElement,
+  useRef,
+  useCallback,
+} from 'react';
 import logo from './logo.svg';
 import loading from './assets/Ellipsis-1s-200px.svg';
 import './App.css';
@@ -17,12 +23,24 @@ function App() {
   const [postsAll, setPostsAll] = useState<IPost[]>([]);
   const [posts, setPosts] = useState<IPost[]>([]);
 
-  const handleLoad = (start: number, end: number) => {
-    setTimeout(() => {
-      const respose = postsAll.slice(start, end);
-      setPosts([...posts, ...respose]);
-    }, 1000);
-  };
+  // 💢 Bad !!
+  // const handleLoad = (start: number, end: number) => {
+  //   setTimeout(() => {
+  //     const respose = postsAll.slice(start, end);
+  //     setPosts([...posts, ...respose]);
+  //   }, 1000);
+  // };
+
+  // 🌟 Good !!
+  const handleLoad = useCallback(
+    (start: number, end: number) => {
+      setTimeout(() => {
+        const respose = postsAll.slice(start, end);
+        setPosts([...posts, ...respose]);
+      }, 1000);
+    },
+    [posts]
+  );
 
   const handleSetData = async () => {
     const response = await getSomething();
