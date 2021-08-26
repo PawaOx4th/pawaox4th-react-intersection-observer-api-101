@@ -1,10 +1,19 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, ReactElement, useRef } from 'react';
 import logo from './logo.svg';
 import loading from './assets/Ellipsis-1s-200px.svg';
 import './App.css';
 import { getSomething, IPost, postsResponse } from './api';
 
-const LoadingComponent = () => {
+// const LoadingComponent = () => {
+//   return (
+//     <div className="mt-6  flex justify-center">
+//       {/* <span className="text-black text-2xl"> ...🤡😷🥳...</span> */}
+//       <img src={loading} alt="" className="w-20" />
+//     </div>
+//   );
+// };
+
+const LoadingComponent = (): ReactElement => {
   return (
     <div className="mt-6  flex justify-center">
       {/* <span className="text-black text-2xl"> ...🤡😷🥳...</span> */}
@@ -14,7 +23,6 @@ const LoadingComponent = () => {
 };
 
 function App() {
-  const [count, setCount] = useState(0);
   const [postsAll, setPostsAll] = useState<IPost[]>([]);
   const [posts, setPosts] = useState<IPost[]>([]);
 
@@ -34,6 +42,9 @@ function App() {
     handleSetData();
   }, []);
 
+  //***************************************************/
+  const [element, setElement] = useState<HTMLDivElement | null>();
+
   return (
     <div className="App bg-gray-800 min-h-screen">
       <button onClick={(e) => handleLoad(11, 20)}>😎</button>
@@ -52,7 +63,10 @@ function App() {
                 </div>
               );
             })}
-          <LoadingComponent />
+          <div ref={setElement}>
+            <LoadingComponent />
+          </div>
+          {/* <p ref={setElement}>Loaging</p> */}
         </div>
       </div>
     </div>
