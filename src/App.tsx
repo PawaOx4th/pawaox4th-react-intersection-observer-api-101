@@ -1,45 +1,62 @@
-import React, { useState } from 'react'
-import logo from './logo.svg'
-import './App.css'
+import React, { useEffect, useState } from 'react';
+import logo from './logo.svg';
+import loading from './assets/Ellipsis-1s-200px.svg';
+import './App.css';
+import { getSomething, IPost, postsResponse } from './api';
+
+const LoadingComponent = () => {
+  return (
+    <div className="mt-6  flex justify-center">
+      {/* <span className="text-black text-2xl"> ...🤡😷🥳...</span> */}
+      <img src={loading} alt="" className="w-20" />
+    </div>
+  );
+};
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [count, setCount] = useState(0);
+  const [postsAll, setPostsAll] = useState<IPost[]>([]);
+  const [posts, setPosts] = useState<IPost[]>([]);
+
+  const handleLoad = (start: number, end: number) => {
+    const respose = postsAll.slice(start, end);
+    setPosts([...posts, ...respose]);
+    // console.log('posts', posts);
+  };
+
+  const handleSetData = async () => {
+    const response = await getSomething();
+    setPostsAll([...response]);
+    setPosts([...response.slice(0, 10)]);
+  };
+
+  useEffect(() => {
+    handleSetData();
+  }, []);
 
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>Hello Vite + React!</p>
-        <p>
-          <button type="button" onClick={() => setCount((count) => count + 1)}>
-            count is: {count}
-          </button>
-        </p>
-        <p>
-          Edit <code>App.tsx</code> and save to test HMR updates.
-        </p>
-        <p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-          {' | '}
-          <a
-            className="App-link"
-            href="https://vitejs.dev/guide/features.html"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Vite Docs
-          </a>
-        </p>
-      </header>
+    <div className="App bg-gray-800 min-h-screen">
+      <button onClick={(e) => handleLoad(11, 20)}>😎</button>
+      <div className="mx-auto my-0 w-8/12 pt-12 pb-14 text-neon-eucalyptus">
+        <div>
+          {posts &&
+            posts.map((item, index) => {
+              return (
+                <div
+                  key={item.id}
+                  className="py-5  mt-4 px-2 bg-gray-900 rounded-lg text-xl flex justify-between"
+                >
+                  <strong className="text-4xl">{index + 1}:</strong>
+                  <img src={item.data} alt="" />
+                  {item.message}
+                </div>
+              );
+            })}
+          <LoadingComponent />
+        </div>
+      </div>
     </div>
-  )
+  );
 }
 
-export default App
+export default App;
