@@ -10,7 +10,8 @@
     "faker": "5.5.3",
     "nanoid": "3.1.25",
     "react": "^17.0.0",
-    "react-dom": "^17.0.0"
+    "react-dom": "^17.0.0",
+    "react-intersection-observer": "8.32.0"
   },
   "devDependencies": {
     "@types/faker": "5.5.8",
