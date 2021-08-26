@@ -3,20 +3,11 @@ import logo from './logo.svg';
 import loading from './assets/Ellipsis-1s-200px.svg';
 import './App.css';
 import { getSomething, IPost, postsResponse } from './api';
-
-// const LoadingComponent = () => {
-//   return (
-//     <div className="mt-6  flex justify-center">
-//       {/* <span className="text-black text-2xl"> ...🤡😷🥳...</span> */}
-//       <img src={loading} alt="" className="w-20" />
-//     </div>
-//   );
-// };
+import { useInView } from 'react-intersection-observer';
 
 const LoadingComponent = (): ReactElement => {
   return (
     <div className="mt-6  flex justify-center">
-      {/* <span className="text-black text-2xl"> ...🤡😷🥳...</span> */}
       <img src={loading} alt="" className="w-20" />
     </div>
   );
@@ -27,9 +18,10 @@ function App() {
   const [posts, setPosts] = useState<IPost[]>([]);
 
   const handleLoad = (start: number, end: number) => {
-    const respose = postsAll.slice(start, end);
-    setPosts([...posts, ...respose]);
-    // console.log('posts', posts);
+    setTimeout(() => {
+      const respose = postsAll.slice(start, end);
+      setPosts([...posts, ...respose]);
+    }, 1000);
   };
 
   const handleSetData = async () => {
@@ -43,7 +35,21 @@ function App() {
   }, []);
 
   //***************************************************/
-  const [element, setElement] = useState<HTMLDivElement | null>();
+  // const [element, setElement] = useState<HTMLDivElement | null>();
+  const { ref: element, inView } = useInView({ threshold: 1 });
+
+  useEffect(() => {
+    if (inView) {
+      console.log('🤩', inView);
+
+      handleLoad(
+        posts.length,
+        postsAll.length > posts.length ? posts.length + 10 : postsAll.length
+      );
+    } else {
+      console.log('🥵', inView);
+    }
+  }, [inView]);
 
   return (
     <div className="App bg-gray-800 min-h-screen">
@@ -63,7 +69,7 @@ function App() {
                 </div>
               );
             })}
-          <div ref={setElement}>
+          <div ref={element}>
             <LoadingComponent />
           </div>
           {/* <p ref={setElement}>Loaging</p> */}
